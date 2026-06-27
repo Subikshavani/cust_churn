@@ -1,0 +1,8 @@
+- [x] Update config.py to use models/model.pkl
+- [x] Update modeling.py to output model.pkl and store metrics
+- [x] Update utils.py to compute health scores, health categories, and 5-segment classification
+- [x] Update charts.py with new visualizations (segment comparisons, cluster scatter, revenue forecast, waterfall chart)
+- [x] Update pages.py with all 8 pages (Executive Dashboard, Churn Prediction, Explainable AI, Customer Segmentation, Revenue Risk Analysis, Retention Simulator, Business Insights, Settings)
+- [x] Update app.py sidebar navigation and routing
+- [x] Update docs (architecture.md, workflow.md, slides.md)
+- [x] Verify execution and model training
