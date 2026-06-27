@@ -185,7 +185,10 @@ def train_and_select_best_model() -> TrainingResult:
 
 def load_model_artifact():
     if MODEL_PATH.exists():
-        return joblib.load(MODEL_PATH)
+        try:
+            return joblib.load(MODEL_PATH)
+        except Exception:
+            pass
     train_and_select_best_model()
     return joblib.load(MODEL_PATH)
 

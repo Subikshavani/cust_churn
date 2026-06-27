@@ -46,31 +46,39 @@ def _explanation_rules(payload: Dict[str, object]) -> List[str]:
 
 
 def explain_prediction(payload: Dict[str, object]) -> PredictionResult:
-    model = load_model_artifact()
-    frame = pd.DataFrame([payload])
-    frame = _prepare_frame(frame)
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", message="X does not have valid feature names*")
-        probability = float(model.predict_proba(frame)[:, 1][0])
-    prediction = "Yes" if probability >= 0.5 else "No"
-    category = _risk_category(probability)
+    def _do_predict():
+        model = load_model_artifact()
+        frame = pd.DataFrame([payload])
+        frame = _prepare_frame(frame)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", message="X does not have valid feature names*")
+            probability = float(model.predict_proba(frame)[:, 1][0])
+        prediction = "Yes" if probability >= 0.5 else "No"
+        category = _risk_category(probability)
 
-    preprocessor = model.named_steps["preprocessor"]
-    feature_names = get_feature_names(preprocessor)
-    estimator = model.named_steps["model"]
-    importance_values = getattr(estimator, "feature_importances_", None)
-    if importance_values is None and hasattr(estimator, "coef_"):
-        importance_values = np.abs(estimator.coef_[0])
-    if importance_values is None:
-        feature_importance = [(name, 0.0) for name in feature_names[:10]]
-    else:
-        top_indices = np.argsort(np.abs(importance_values))[::-1][:10]
-        feature_importance = [(feature_names[index], float(abs(importance_values[index]))) for index in top_indices]
+        preprocessor = model.named_steps["preprocessor"]
+        feature_names = get_feature_names(preprocessor)
+        estimator = model.named_steps["model"]
+        importance_values = getattr(estimator, "feature_importances_", None)
+        if importance_values is None and hasattr(estimator, "coef_"):
+            importance_values = np.abs(estimator.coef_[0])
+        if importance_values is None:
+            feature_importance = [(name, 0.0) for name in feature_names[:10]]
+        else:
+            top_indices = np.argsort(np.abs(importance_values))[::-1][:10]
+            feature_importance = [(feature_names[index], float(abs(importance_values[index]))) for index in top_indices]
 
-    return PredictionResult(
-        churn_prediction=prediction,
-        churn_probability=probability,
-        risk_category=category,
-        reason_text=_explanation_rules(payload),
-        feature_importance=feature_importance,
-    )
+        return PredictionResult(
+            churn_prediction=prediction,
+            churn_probability=probability,
+            risk_category=category,
+            reason_text=_explanation_rules(payload),
+            feature_importance=feature_importance,
+        )
+
+    try:
+        return _do_predict()
+    except Exception:
+        # If prediction fails due to incompatible model or feature mismatch on cloud, retrain and retry
+        train_and_select_best_model()
+        return _do_predict()
