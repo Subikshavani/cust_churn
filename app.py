@@ -55,84 +55,112 @@ is_dark_mode = st.sidebar.toggle("🌙 Dark Mode", value=True)
 if not is_dark_mode:
     st.markdown("""
         <style>
-        /* ── Purple Light mode: soft lavender background ── */
+        /* ════════════════════════════════════════════════
+           PURPLE LIGHT MODE — fully hardcoded, safe for deployment
+           ════════════════════════════════════════════════ */
+
+        /* ── App background: soft lavender ── */
+        html, body { background-color: #f5f3ff !important; color: #1e1b4b !important; }
         .stApp {
             background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #faf5ff 100%) !important;
-            background-image: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #faf5ff 100%) !important;
-        }
-
-        /* ── Purple Light mode: sidebar light violet ── */
-        [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #ede9fe 0%, #ddd6fe 100%) !important;
-            border-right: 1px solid rgba(109, 40, 217, 0.2) !important;
-        }
-
-        /* ── Purple Light mode: dark text everywhere ── */
-        .stApp, .stApp *,
-        [data-testid="stSidebar"], [data-testid="stSidebar"] *,
-        .stMarkdown, .stMarkdown p, .stMarkdown h1, .stMarkdown h2,
-        .stMarkdown h3, .stMarkdown h4, .stMarkdown li,
-        .stText, label, .stRadio label, .stSelectbox label,
-        .stToggle label, .stCaption, .stMetric label,
-        .stMetric div, p, span, h1, h2, h3, h4, h5, h6,
-        div[data-testid="stMetricValue"], div[data-testid="stMetricLabel"],
-        .brand-title, .brand-subtitle, .section-title,
-        .kpi-value, .kpi-label, .sidebar-brand-subtitle {
             color: #1e1b4b !important;
         }
 
-        /* ── Purple Light mode: cards ── */
-        .glass-card, .kpi-card, [data-testid="stForm"] {
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-color: rgba(109, 40, 217, 0.25) !important;
-            box-shadow: 0 4px 20px rgba(109, 40, 217, 0.1) !important;
-            backdrop-filter: blur(12px) !important;
+        /* ── Force DARK text on every element ── */
+        .stApp *,
+        .stMarkdown, .stMarkdown *,
+        [data-testid="stMarkdownContainer"],
+        [data-testid="stMarkdownContainer"] *,
+        [data-testid="stText"],
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricDelta"],
+        .stCaption,
+        .stRadio label, .stSelectbox label,
+        .stSlider label, .stToggle label,
+        .stCheckbox label,
+        p, span, h1, h2, h3, h4, h5, h6, label, li, a,
+        div, td, th {
+            color: #1e1b4b !important;
         }
 
-        /* ── Purple Light mode: KPI hover ── */
+        /* ── Sidebar: light violet ── */
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #ede9fe 0%, #ddd6fe 100%) !important;
+            border-right: 1px solid rgba(109,40,217,0.2) !important;
+        }
+        [data-testid="stSidebar"] * { color: #1e1b4b !important; }
+
+        /* ── Sidebar brand title: purple accent ── */
+        .sidebar-brand-title { color: #5b21b6 !important; }
+        .sidebar-brand-subtitle { color: #4c1d95 !important; opacity: 1 !important; }
+
+        /* ── Section titles ── */
+        .section-title { color: #4c1d95 !important; }
+        .brand-title   { color: #1e1b4b !important; }
+        .brand-subtitle{ color: #3b0764 !important; opacity: 1 !important; }
+
+        /* ── KPI card: white frosted with dark text ── */
+        .kpi-card {
+            background: rgba(255,255,255,0.88) !important;
+            border: 1px solid rgba(109,40,217,0.22) !important;
+            box-shadow: 0 4px 20px rgba(109,40,217,0.1) !important;
+        }
+        .kpi-card * { color: #1e1b4b !important; }
+        .kpi-value  { color: #1e1b4b !important; font-weight: 800 !important; }
+        .kpi-label  { color: #4c1d95 !important; }
         .kpi-card:hover {
             border-color: #7c3aed !important;
-            box-shadow: 0 8px 28px rgba(124, 58, 237, 0.18) !important;
+            box-shadow: 0 8px 28px rgba(124,58,237,0.18) !important;
         }
 
-        /* ── Purple Light mode: sidebar brand title ── */
-        .sidebar-brand-title {
-            color: #5b21b6 !important;
+        /* ── Glass card ── */
+        .glass-card {
+            background: rgba(255,255,255,0.82) !important;
+            border: 1px solid rgba(109,40,217,0.22) !important;
+            box-shadow: 0 4px 24px rgba(109,40,217,0.1) !important;
+            backdrop-filter: blur(12px) !important;
+        }
+        .glass-card * { color: #1e1b4b !important; }
+
+        /* ── Form ── */
+        [data-testid="stForm"] {
+            background: rgba(255,255,255,0.82) !important;
+            border: 1px solid rgba(109,40,217,0.22) !important;
+            border-radius: 22px !important;
+        }
+        [data-testid="stForm"] * { color: #1e1b4b !important; }
+
+        /* ── Input / select boxes ── */
+        [data-baseweb="input"] input,
+        [data-baseweb="select"] div,
+        [data-baseweb="textarea"] textarea {
+            background: #ffffff !important;
+            color: #1e1b4b !important;
+            border-color: rgba(109,40,217,0.35) !important;
         }
 
-        /* ── Purple Light mode: section titles ── */
-        .section-title {
-            color: #4c1d95 !important;
-        }
+        /* ── Badges ── */
+        .badge-low   { background: rgba(52,211,153,0.18) !important; color: #065f46 !important; }
+        .badge-medium{ background: rgba(245,158,11,0.18) !important; color: #78350f !important; }
+        .badge-high  { background: rgba(248,113,113,0.18) !important; color: #7f1d1d !important; }
 
-        /* ── Purple Light mode: badges ── */
-        .badge-low   { background: rgba(52, 211, 153, 0.18) !important; color: #065f46 !important; }
-        .badge-medium{ background: rgba(245, 158, 11, 0.18) !important; color: #78350f !important; }
-        .badge-high  { background: rgba(248, 113, 113, 0.18) !important; color: #7f1d1d !important; }
-
-        /* ── Purple Light mode: primary button ── */
+        /* ── Primary button ── */
         button[kind="primary"] {
             background: linear-gradient(90deg, #7c3aed, #a855f7) !important;
             color: #ffffff !important;
             font-weight: 800 !important;
         }
 
-        /* ── Purple Light mode: chart plot background ── */
-        .js-plotly-plot .plotly .bg {
-            fill: rgba(237, 233, 254, 0.6) !important;
+        /* ── DataFrames / Tables: dark text, lavender bg ── */
+        [data-testid="stDataFrame"] th,
+        [data-testid="stDataFrame"] td {
+            color: #1e1b4b !important;
+            background: rgba(237,233,254,0.7) !important;
+            border-color: rgba(109,40,217,0.15) !important;
         }
 
-        /* ── Purple Light mode: legend box dark background + dark text ── */
-        .js-plotly-plot .plotly .legend rect.bg {
-            fill: #1e1b4b !important;
-            stroke: rgba(109, 40, 217, 0.5) !important;
-            rx: 6 !important;
-        }
-        .js-plotly-plot .plotly .legend text {
-            fill: #f5f3ff !important;
-        }
-
-        /* ── Purple Light mode: chart axis labels / titles / tick text dark ── */
+        /* ── Charts: dark axis text, dark legend box ── */
         .js-plotly-plot .plotly text,
         .js-plotly-plot .plotly .xtitle,
         .js-plotly-plot .plotly .ytitle,
@@ -142,35 +170,23 @@ if not is_dark_mode:
             fill: #1e1b4b !important;
             color: #1e1b4b !important;
         }
-
-        /* ── Purple Light mode: gridlines ── */
+        .js-plotly-plot .plotly .bg {
+            fill: rgba(237,233,254,0.55) !important;
+        }
+        .js-plotly-plot .plotly .legend rect.bg {
+            fill: #1e1b4b !important;
+            stroke: rgba(109,40,217,0.5) !important;
+        }
+        .js-plotly-plot .plotly .legend text {
+            fill: #f5f3ff !important;
+        }
         .js-plotly-plot .plotly .gridlayer path,
         .js-plotly-plot .plotly .zerolinelayer path {
-            stroke: rgba(109, 40, 217, 0.15) !important;
+            stroke: rgba(109,40,217,0.15) !important;
         }
-
-        /* ── Purple Light mode: chart container transparent ── */
         [data-testid="stPlotlyChart"] > div,
         [data-testid="stPlotlyChart"] .modebar {
             background: transparent !important;
-        }
-
-        /* ── Purple Light mode: dataframe / table ── */
-        [data-testid="stDataFrame"] th,
-        [data-testid="stDataFrame"] td,
-        .stDataFrame th, .stDataFrame td {
-            color: #1e1b4b !important;
-            background: rgba(237, 233, 254, 0.6) !important;
-            border-color: rgba(109, 40, 217, 0.15) !important;
-        }
-
-        /* ── Purple Light mode: input / select boxes ── */
-        [data-baseweb="input"] input,
-        [data-baseweb="select"] div,
-        [data-baseweb="textarea"] textarea {
-            background: #ffffff !important;
-            color: #1e1b4b !important;
-            border-color: rgba(109, 40, 217, 0.35) !important;
         }
         </style>
     """, unsafe_allow_html=True)
